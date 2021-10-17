@@ -29,13 +29,15 @@ const styles = StyleSheet.create({
   },
   flip: {
     position: "absolute",
-    bottom: 10,
-    left: 25,
-    height: 25,
-    width: 25,
-    marginVertical: 10,
-    borderRadius: 25,
-    backgroundColor: "#fff",
+    right: 15,
+    top: 700,
+    width: 40,
+    height: 40,
+    borderRadius: 10,
+  },
+  startstopcontainer: {
+    flexDirection: "row",
+    justifyContent: "space-around",
   },
 });
 

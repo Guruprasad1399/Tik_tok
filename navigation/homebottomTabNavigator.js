@@ -2,25 +2,26 @@ import React from "react";
 import { createBottomTabNavigator } from "@react-navigation/bottom-tabs";
 import Home from "../screen/Home";
 import Camera from "../screen/Camera";
+import Profile from "../screen/Profile";
+import Inbox from "../screen/Inbox";
 import { Entypo } from "@expo/vector-icons";
 import { AntDesign } from "@expo/vector-icons";
 import { MaterialCommunityIcons } from "@expo/vector-icons";
 import { Ionicons } from "@expo/vector-icons";
 import { Image, Text } from "react-native";
 import PlusIcon from "../assets/Images/plus-icon.png";
+import Search from "../screen/Search";
 
 const Tab = createBottomTabNavigator();
 
 const homebottomTabNavigator = () => {
   return (
     <Tab.Navigator
-      tabBarOptions={{
-        tabStyle: {
-          backgroundColor: "#000",
-        },
-        activeTintColor: "#fff",
+      screenOptions={{
+        tabBarStyle: { backgroundColor: "#000" },
+        tabBarActiveTintColor: "#fff",
+        headerShown: false,
       }}
-      screenOptions={{ headerShown: false }}
     >
       <Tab.Screen
         name={"Home"}
@@ -33,7 +34,7 @@ const homebottomTabNavigator = () => {
       />
       <Tab.Screen
         name={"Search"}
-        component={() => <Text>Search</Text>}
+        component={Search}
         options={{
           tabBarIcon: ({ color }) => (
             <AntDesign name="search1" size={25} color={color} />
@@ -43,7 +44,6 @@ const homebottomTabNavigator = () => {
       <Tab.Screen
         name={"Upload"}
         component={Camera}
-        unmountOnBlur={true}
         options={{
           unmountOnBlur: true,
           tabBarIcon: () => (
@@ -57,7 +57,7 @@ const homebottomTabNavigator = () => {
       />
       <Tab.Screen
         name={"Inbox"}
-        component={() => <Text>Inbox</Text>}
+        component={Inbox}
         options={{
           tabBarIcon: ({ color }) => (
             <MaterialCommunityIcons
@@ -70,7 +70,7 @@ const homebottomTabNavigator = () => {
       />
       <Tab.Screen
         name={"Profile"}
-        component={() => <Text>Profile</Text>}
+        component={Profile}
         options={{
           tabBarIcon: ({ color }) => (
             <Ionicons name="person-outline" size={25} color={color} />

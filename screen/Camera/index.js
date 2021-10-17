@@ -1,5 +1,5 @@
 import React, { useState, useEffect, useRef } from "react";
-import { View, Text, Pressable } from "react-native";
+import { View, Text, Pressable, Button } from "react-native";
 import { Camera } from "expo-camera";
 import { Audio } from "expo-av";
 import styles from "./styles";
@@ -7,22 +7,21 @@ import { useNavigation } from "@react-navigation/native";
 
 const Camera1 = () => {
   const [hasPermission, setHasPermission] = useState(null);
-  const [audperm, setAudperm] = useState(null);
+  const [audperm, setaudperm] = useState(null);
   const [type, setType] = useState(Camera.Constants.Type.back);
   const [isRecording, setIsRecording] = useState(false);
-  const [camera, setcamera] = useState(null);
-
   const navigation = useNavigation();
+  const cameraRef = useRef();
 
   useEffect(() => {
     (async () => {
       const { status } = await Camera.requestPermissionsAsync();
-      const { audstatus } = await Audio.requestPermissionsAsync();
+      const { status1 } = await Audio.requestPermissionsAsync();
       if (status === "granted") {
         setHasPermission(status === "granted");
       }
-      if (audstatus === "granted") {
-        setAudperm(audstatus === "granted");
+      if (status1 === "granted") {
+        setaudperm(status1 === "granted");
       }
     })();
   }, []);
@@ -34,42 +33,58 @@ const Camera1 = () => {
     return <Text>No access to camera</Text>;
   }
 
-  const takeVideo = async () => {
-    if (camera && !isRecording) {
-      setIsRecording(true);
-      let video = await camera.recordAsync();
-      console.log("video", video.uri);
-      navigation.navigate("CreatePost", { videoUri: video.uri });
-    } else {
+  const onRecord = async () => {
+    if (cameraRef.current) {
+      try {
+        const videoRecordPromise = cameraRef.current.recordAsync();
+        if (videoRecordPromise) {
+          setIsRecording(true);
+          const video = await videoRecordPromise;
+          navigation.navigate("CreatePost", { videoUri: video.uri });
+        }
+      } catch (err) {
+        console.log(err);
+      }
+    }
+  };
+
+  const stopVideoRecording = () => {
+    if (cameraRef.current) {
       setIsRecording(false);
-      camera.stopRecording();
+      cameraRef.current.stopRecording();
     }
   };
 
   return (
     <View style={styles.container}>
       <Camera
-        ref={(ref) => setcamera(ref)}
+        ref={cameraRef}
         style={styles.preview}
         type={type}
         ratio={"4:3"}
       />
-      <Pressable
-        onPress={() => {
-          takeVideo();
-        }}
-        style={isRecording ? styles.buttonStop : styles.buttonRecord}
-      />
-      <Pressable
-        style={styles.flip}
-        onPress={() => {
-          setType(
-            type === Camera.Constants.Type.back
-              ? Camera.Constants.Type.front
-              : Camera.Constants.Type.back
-          );
-        }}
-      />
+      <View style={styles.startstopcontainer}>
+        <Pressable onPress={onRecord}>
+          <Text style={{ color: "white", fontSize: 20 }}>Start Rec</Text>
+        </Pressable>
+        <Pressable onPress={stopVideoRecording}>
+          <Text style={{ color: "white", fontSize: 20 }}>Stop Rec</Text>
+        </Pressable>
+      </View>
+
+      <View style={{ alignItems: "center" }}>
+        <Pressable
+          onPress={() => {
+            setType(
+              type === Camera.Constants.Type.back
+                ? Camera.Constants.Type.front
+                : Camera.Constants.Type.back
+            );
+          }}
+        >
+          <Text style={{ color: "white", fontSize: 20 }}>Flip</Text>
+        </Pressable>
+      </View>
     </View>
   );
 };

@@ -3,9 +3,11 @@ import { View, FlatList, Dimensions } from "react-native";
 import Post from "../../components/Posts";
 import { API, graphqlOperation } from "aws-amplify";
 import { listPosts } from "../../src/graphql/queries";
+// import { useNavigation } from "@react-navigation/native";
 
 const Home = () => {
   const [posts, setPosts] = useState([]);
+  // const navigation = useNavigation();
 
   useEffect(() => {
     const fetchPost = async () => {
@@ -30,7 +32,8 @@ const Home = () => {
         snapToInterval={Dimensions.get("window").height - 47}
         snapToAlignment={"start"}
         decelerationRate={"fast"}
-        maxToRenderPerBatch={5}
+        maxToRenderPerBatch={3}
+        bounces={false}
       />
     </View>
   );
