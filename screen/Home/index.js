@@ -32,7 +32,7 @@ const Home = () => {
         snapToInterval={Dimensions.get("window").height - 47}
         snapToAlignment={"start"}
         decelerationRate={"fast"}
-        maxToRenderPerBatch={3}
+        maxToRenderPerBatch={5}
         bounces={false}
       />
     </View>

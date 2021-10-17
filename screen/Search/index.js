@@ -1,9 +1,8 @@
-import React, { useState, useEffect, UseRef } from "react";
+import React, { useState, useEffect } from "react";
 import { View, TextInput, Pressable, Text, ScrollView } from "react-native";
 import styles from "./styles";
 import { Ionicons } from "@expo/vector-icons";
-import { Video } from "expo-av";
-import { API, graphqlOperation, Auth } from "aws-amplify";
+import { API, graphqlOperation } from "aws-amplify";
 import { listPosts } from "../../src/graphql/queries";
 import { Storage } from "aws-amplify";
 
@@ -46,6 +45,7 @@ const Search = () => {
       alert("You havent searched anything");
     } else {
       console.log(searchtxt);
+      setsearchtxt("");
     }
   };
 
@@ -62,7 +62,11 @@ const Search = () => {
           maxLength={35}
         />
         <Pressable onPress={onSearch}>
-          <Ionicons name="search" size={30} color="white" />
+          {searchtxt === "" ? (
+            <Ionicons name="search" size={30} color="white" />
+          ) : (
+            <Ionicons name="close" size={30} color="white" />
+          )}
         </Pressable>
       </View>
       <View style={styles.searchContainer}>
